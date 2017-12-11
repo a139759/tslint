@@ -223,9 +223,9 @@ function filterFiles(files: string[], patterns: string[], include: boolean): str
 function resolveGlobs(files: string[], ignore: string[], outputAbsolutePaths: boolean | undefined, logger: Logger): string[] {
     const results = flatMap(
         files,
-        (file) => glob.sync(trimSingleQuotes(file), { ignore, nodir: true }),
+        (file) => glob.sync(trimSingleQuotes(file), { ignore, nodir: true, dot: true }),
     );
-    // warn if `files` contains non-existent files, that are not patters and not excluded by any of the exclude patterns
+    // warn if `files` contains non-existent files, that are not patterns and not excluded by any of the exclude patterns
     for (const file of filterFiles(files, ignore, false)) {
         if (!glob.hasMagic(file) && !results.some(createMinimatchFilter(file))) {
             logger.error(`'${file}' does not exist. This will be an error in TSLint 6.\n`); // TODO make this an error in v6.0.0
